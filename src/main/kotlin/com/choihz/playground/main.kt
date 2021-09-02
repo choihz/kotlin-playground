@@ -1,23 +1,27 @@
 package com.choihz.playground
 
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-var count = 0
+lateinit var jobA: Job
+lateinit var jobB: Job
 
 fun main() = runBlocking {
-	val workerA = asyncIncrement(2000)
-	val workerB = asyncIncrement(100)
-
-	workerA.await()
-	workerB.await()
-
-	println("count $count")
-}
-
-fun asyncIncrement(by: Int) = GlobalScope.async {
-	for (i in 0 until by) {
-		count++
+	jobA = GlobalScope.launch {
+		delay(1000)
+		// wait for JobB to finish
+		jobB.join()
 	}
+
+	jobB = GlobalScope.launch {
+		// wait for JobA to finish
+		jobA.join()
+	}
+
+	// wait for JobA to finish
+	jobA.join()
+	println("Finished!")
 }
