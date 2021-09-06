@@ -1,21 +1,21 @@
 package com.choihz.playground
 
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking {
-	val dispatcher = newFixedThreadPoolContext(4, "myPool")
+	val handler = CoroutineExceptionHandler { context, throwable ->
+		println("Error captured in $context")
+		println("Message: ${throwable.message}")
+	}
 
-	GlobalScope.launch(dispatcher) {
-		println("Starting in ${Thread.currentThread().name}") // Starting in myPool-1
-		delay(500)
-		println("Resuming in ${Thread.currentThread().name}") // Resuming in myPool-2
-		delay(500)
-		println("Resuming in ${Thread.currentThread().name}") // Resuming in myPool-1
-		delay(500)
-		println("Resuming in ${Thread.currentThread().name}") // Resuming in myPool-2
-	}.join()
+	GlobalScope.launch(handler) {
+		TODO("Not implemented yet!")
+	}
+
+	// wait for the error to happen
+	delay(500)
 }
