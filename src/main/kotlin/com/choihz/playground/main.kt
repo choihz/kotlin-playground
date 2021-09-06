@@ -1,27 +1,12 @@
 package com.choihz.playground
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.choihz.playground.profile.ProfileServiceClient
+import com.choihz.playground.profile.ProfileServiceRepository
 import kotlinx.coroutines.runBlocking
 
-lateinit var jobA: Job
-lateinit var jobB: Job
-
 fun main() = runBlocking {
-	jobA = GlobalScope.launch {
-		delay(1000)
-		// wait for JobB to finish
-		jobB.join()
-	}
+	val client: ProfileServiceRepository = ProfileServiceClient()
+	val profile = client.asyncFetchById(12).await()
 
-	jobB = GlobalScope.launch {
-		// wait for JobA to finish
-		jobA.join()
-	}
-
-	// wait for JobA to finish
-	jobA.join()
-	println("Finished!")
+	println(profile)
 }
