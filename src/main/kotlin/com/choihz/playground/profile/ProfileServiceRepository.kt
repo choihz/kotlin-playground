@@ -1,8 +1,6 @@
 package com.choihz.playground.profile
 
-import kotlinx.coroutines.Deferred
-
 interface ProfileServiceRepository {
-	fun asyncFetchByName(name: String): Deferred<Profile>
-	fun asyncFetchById(id: Long): Deferred<Profile>
+	suspend fun fetchByName(name: String): Profile
+	suspend fun fetchById(id: Long): Profile
 }
