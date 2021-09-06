@@ -1,12 +1,15 @@
 package com.choihz.playground
 
-import com.choihz.playground.profile.ProfileServiceClient
-import com.choihz.playground.profile.ProfileServiceRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking {
-	val client: ProfileServiceRepository = ProfileServiceClient()
-	val profile = client.fetchById(12)
-
-	println(profile)
+	GlobalScope.launch(Dispatchers.Unconfined) {
+		println("Starting in ${Thread.currentThread().name}") // Starting in main
+		delay(500)
+		println("Resuming in ${Thread.currentThread().name}") // Resuming in kotlinx.coroutines.DefaultExecutor
+	}.join()
 }
